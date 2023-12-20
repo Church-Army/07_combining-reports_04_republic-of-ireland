@@ -7,7 +7,7 @@ format:
 editor: visual
 params: 
   com_name: "newry"
-title: '`r paste("Annual summary report: ", snakecase::to_title_case(params[["com_name"]]), " Centre of Mission")`'
+title: '`r paste("Impact and Context Report: ", snakecase::to_title_case(params[["com_name"]]), " Centre of Mission")`'
 execute: 
   echo: false
   warning: false
@@ -50,7 +50,7 @@ This short report provides an overview of the work that's been taking place at `
 
 The first section of this report summarises data provided by Church Army evangelists in order to describe the activities undertaken by the CoM, as well as the CoM's social impact and the ways in which people are exploring and developing faith through the work of the CoM.
 
-The second section of the report uses data from the *Northern Ireland Statistics and Research Agency's* 2021 national census to describe the population who live within the area local to the CoM.
+The second section of the report uses data from the *Central Statistics Office's* 2022 census of the Republic of Ireland to describe the population who live within the area local to the CoM.
 
 ## Section 1: Activities and impact
 
@@ -144,7 +144,7 @@ The tables and figures in this section describe the CoM's area of operation in t
 
 -   Household composition
 
-All the data in this section of the report were collected in the *Northern Ireland Statistics and Research Agency*'s 2021 national census.
+All the data in this section of the report were collected in the *Central Statistics Office'*s 2022 census of the Republic of Ireland.
 
 ### Methodology
 
