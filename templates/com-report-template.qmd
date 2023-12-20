@@ -1,0 +1,391 @@
+---
+author: "Church Army's Research Team"
+format:
+  docx:
+    reference-doc: caru-template.docx
+    fig-width: 7
+editor: visual
+params: 
+  com_name: "newry"
+title: '`r paste("Annual summary report: ", snakecase::to_title_case(params[["com_name"]]), " Centre of Mission")`'
+execute: 
+  echo: false
+  warning: false
+---
+
+```{r libraries}
+#| output: false
+library(ggplot2)
+library(knitr)
+library(purrr)
+library(here)
+library(stringr)
+library(dplyr)
+library(snakecase)
+
+com_name <- params[["com_name"]]
+
+census_data <-
+  readRDS(here("data", "census-data", 
+               paste(com_name, "report-data.RDS", sep = "_")))
+
+rtj_copy <- 
+  readRDS(here("data", "rtj-report-copy",
+               paste(com_name, "report-copy.RDS", sep = "_")))
+
+desc_copy <- 
+  readRDS(here("data", "com-descriptive-text",
+               paste(com_name, "descriptive-copy.RDS", sep = "_")))
+
+com_name <- to_title_case(com_name)
+
+## There is no report copy for llanelli apparently
+
+#TODO: Correct heading levels in rtj-data project
+```
+
+## Introduction
+
+This short report provides an overview of the work that's been taking place at `r com_name` Centre of Mission (CoM) throughout the financial year 2022-2023, then situates that work within its local context using national census data.
+
+The first section of this report summarises data provided by Church Army evangelists in order to describe the activities undertaken by the CoM, as well as the CoM's social impact and the ways in which people are exploring and developing faith through the work of the CoM.
+
+The second section of the report uses data from the *Northern Ireland Statistics and Research Agency's* 2021 national census to describe the population who live within the area local to the CoM.
+
+## Section 1: Activities and impact
+
+```{r}
+#| output: asis
+tranches <- unlist(rtj_copy[["tranches"]])
+tranches <- tranches == "yes"
+
+text <- {
+  if(all(tranches)) ""
+  else if(tranches[1]){
+    "\n\nThe data in this section of the report summarise the Centre of Mission's activity between April and October 2022.\n\n"
+  }
+  else {
+    "\n\nThe data in this section of the report summarise the Centre of Mission's activity between November 2022 and March 2023.\n\n"
+  }
+}
+
+cat(text)
+```
+
+```{r}
+#| output: asis
+cat(rtj_copy[["activities_section"]])
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| output: asis
+cat(rtj_copy[["faith_copy"]])
+```
+
+```{r}
+#| output: asis
+cat(rtj_copy[["food_prov_intro"]])
+```
+
+```{r food_prov_table}
+#| output: true
+safe_kable <- function(x, ...){
+  if(length(x) > 1 & !all(is.na(unlist(x)))){
+    names(x) <- c(...)
+    kable(x)
+  }
+}
+
+safe_kable(
+  rtj_copy[["food_prov_table"]],
+  c("Food provision", "No. boxes/parcels/meals", "Details")
+  )
+```
+
+```{r}
+#| output: asis
+cat(rtj_copy[["ess_prov_intro"]])
+```
+
+```{r}
+#| output: true
+safe_kable(
+  rtj_copy[["ess_prov_table"]],
+  c("Provision", "No. Items/parcels", "Details"))
+```
+
+```{r}
+#| output: asis
+cat(rtj_copy[["volunteers_copy"]])
+```
+
+```{r}
+#| output: true
+safe_kable(rtj_copy[["backgrounds_table"]], c("Church background", "%"))
+```
+
+{{< pagebreak >}}
+
+## Section 2: Local context
+
+This section of the report describes, at a high level, the characteristics of the area in which the CoM operates. Since many Centres of Mission are set up via a partnership between Church Army and a host diocese, each CoM's area of operation is compared to the population profiles of the local diocese as well as the nation as a whole.
+
+The tables and figures in this section describe the CoM's area of operation in terms of:
+
+-   Age
+
+-   Ethnicity
+
+-   Religion
+
+-   Self-reported general health
+
+-   Household composition
+
+All the data in this section of the report were collected in the *Northern Ireland Statistics and Research Agency*'s 2021 national census.
+
+### Methodology
+
+Researchers consulted the lead evangelist at each CoM in order to determine the specific geographical areas in which the CoM operates. These might include, for example, the specific estate on which a CoM runs its activities, or a particular area of housing inhabited by regular attendees of the CoM's activities. The population characteristics of these areas were approximated via a weighted summation of the populations of the small areas of statistical geography (i.e. output areas) that intersected the area described by the lead evangelist. The weights for this summation were the respective relative intersections of each small area with the area under consideration.
+
+{{< pagebreak >}}
+
+### Age
+
+@fig-age and @tbl-age respectively show the ages of the population at the local, diocesan and national level.
+
+```{r desc_copy_age}
+#| output: asis
+cat(desc_copy[["age"]])
+```
+
+```{r age_plot}
+#| label: fig-age
+#| fig-cap: Population ages in 10 year bands
+census_data[["plots"]][["age_five_year"]]
+```
+
+```{r age_table}
+#| label: tbl-age
+#| tbl-cap: Population ages in 10 year bands
+census_data[["tables"]][["age_five_year"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Ethnicity
+
+@fig-ethnicity and @tbl-ethnicity show, at a very high level, the self-reported ethnicity of the population across each geography.
+
+```{r desc_copy_ethn}
+#| output: asis
+cat(desc_copy[["ethnicity"]])
+```
+
+```{r ethnicity_plot}
+#| label: fig-ethnicity
+#| fig-cap: Population ethnicities
+census_data[["plots"]][["ethnicity"]]
+```
+
+```{r ethnicity_table}
+#| label: tbl-ethnicity
+#| tbl-cap: Population ethnicities
+census_data[["tables"]][["ethnicity"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Religion
+
+@fig-religion and @tbl-religion show the religious beliefs of the population across each geography.
+
+```{r desc_copy_rel}
+#| output: asis
+cat(desc_copy[["religion"]])
+```
+
+```{r religion_plot}
+#| label: fig-religion
+#| fig-cap: Population religions
+census_data[["plots"]][["religion"]]
+```
+
+```{r religion_table}
+#| label: tbl-religion
+#| tbl-cap: Population religions
+census_data[["tables"]][["religion"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### General health
+
+@fig-general-health and @tbl-general-health show the self-reported general health of the population across each geography.
+
+```{r desc_copy_general_health}
+#| output: asis
+cat(desc_copy[["general_health"]])
+```
+
+```{r general_health_plot}
+#| label: fig-general-health
+#| fig-cap: Population self-reported general health
+census_data[["plots"]][["general_health"]]
+```
+
+```{r general_health_table}
+#| label: tbl-general-health
+#| tbl-cap: Population self-reported general health
+census_data[["tables"]][["general_health"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Household composition
+
+Household composition can be summarised in a variety of ways. This report gives a high-level overview of households before considering several sub-sections of all households in more detail.
+
+### Overview of household composition
+
+@fig-household-composition-grouped and @tbl-household-composition-grouped give a summary of the prevalence of different kinds of household across all geographies. These are: Households comprised of a single occupant, households with dependent children and all other households.
+
+```{r desc_copy_hh_overview}
+#| output: asis
+cat(desc_copy[["hh_overview"]])
+```
+
+```{r household_composition_grouped_plot}
+#| label: fig-household-composition-grouped
+#| fig-cap: Population household distribution overview
+census_data[["plots"]][["household_grouped"]]
+```
+
+```{r household_composition_super_table}
+#| label: tbl-household-composition-grouped
+#| tbl-cap: Population household distribution overview
+census_data[["tables"]][["household_composition_super"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Couples
+
+@fig-household-composition-couples and @tbl-household-composition-couples show the distribution of households comprised of a couple, with or without children. These couples may be cohabiting, married, or living in a civil partnership. These households may also include one member in addition to the couple and their children, such as a lodger or a grandparent. Couple-households in which all members are over the age of 65 are considered separately to these households.
+
+```{r desc_copy_hh_couples}
+#| output: asis
+cat(desc_copy[["hh_couples"]])
+```
+
+```{r couples_plot}
+#| label: fig-household-composition-couples
+#| fig-cap: Household distribution – couples
+census_data[["plots"]][["household_couples"]]
+```
+
+```{r couples_table}
+#| label: tbl-household-composition-couples
+#| tbl-cap: Household distribution – couples
+census_data[["tables"]][["household_composition_couple"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Lone occupants and single parents
+
+@fig-household-composition-lone and @tbl-household-composition-lone show the distribution of households comprised of either a single occupant or a single parent living with their children (who may or may not be dependent children). Lone occupants over the age of 65 are considered separately to other lone occupants.
+
+```{r desc_copy_hh_lone}
+#| output: asis
+cat(desc_copy[["hh_lone"]])
+```
+
+```{r lone_plot}
+#| label: fig-household-composition-lone
+#| fig-cap: Household distribution – Lone occupants & single parents
+census_data[["plots"]][["household_lone"]]
+```
+
+```{r lone_table}
+#| label: tbl-household-composition-lone
+#| tbl-cap: Household distribution – Lone occupants & single parents
+census_data[["tables"]][["household_composition_lone"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+### Other
+
+@fig-household-composition-other and @tbl-household-composition-other show the distribution of households not described in previous subsections. These include households comprised of:
+
+```{r order_bullets}
+#| output: asis
+#| 
+bullets <- 
+  c(
+    "* Other households comprised of a single family. This group includes any family households in which all people are aged 66 years and above",
+    "* Any other households, including residential care homes and shared accomodation"
+  )
+
+bullets_names <-
+  c(
+    "Other families (inc. all 66+ y.o)",
+    "Other households"
+    )
+
+table_names <- rownames(census_data[["tables"]][["household_composition_other"]])
+
+bullets_order <- match(bullets_names, table_names)
+
+bullets <- bullets[bullets_order]
+
+str_c(bullets, collapse = "\n") |> 
+  cat()
+```
+
+```{r desc_copy_hh_other}
+#| output: asis
+cat(desc_copy[["hh_other"]])
+```
+
+```{r other_plot}
+#| label: fig-household-composition-other
+#| fig-cap: Household distribution – Other compositions
+census_data[["plots"]][["other_households"]]
+```
+
+```{r other_table}
+#| label: tbl-household-composition-other
+#| tbl-cap: Household distribution – Other compositions
+census_data[["tables"]][["household_composition_other"]] |> 
+  kable()
+```
+
+{{< pagebreak >}}
+
+## Local Deprivation
+
+@fig-deprivation-map shows a map of relative deprivation of the local area. Small areas that are coloured in red are in the 5% most deprived areas nationally, those coloured orange are in the 10% most deprived, and those coloured yellow are in the 20% most deprived. Transparent areas are outside of the 20% most deprived areas in the nation.
+
+Relative deprivation data is sourced from the 2017 Northern Ireland Multiple Deprivation Measures (NIMD). If you would like to know more about NIMD, you can find out about it [here](https://www.nisra.gov.uk/sites/nisra.gov.uk/files/publications/NIMDM17-%20with%20ns.pdf).
+
+```{r imd_map}
+#| output: asis
+#| fig-width: 4
+#| fig-cap: Map of local deprivation (IMD2019)
+
+  cat(str_c("![fig-cap: Map of local deprivation (NIMD2017)]",
+          "(imd-images/", params[["com_name"]], ".png)",
+          "{#fig-deprivation-map fig-alt=\"A map of local deprivation levels\" " ,
+          "width=70%}"))
+```
