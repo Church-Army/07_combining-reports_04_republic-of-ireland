@@ -254,120 +254,23 @@ Household composition can be summarised in a variety of ways. This report gives 
 
 ### Overview of household composition
 
-@fig-household-composition-grouped and @tbl-household-composition-grouped give a summary of the prevalence of different kinds of household across all geographies. These are: Households comprised of a single occupant, households with dependent children and all other households.
+@fig-household-composition and @tbl-household-composition give a summary of the prevalence of different kinds of household across all geographies. These are: Households comprised of a single occupant, households with dependent children and all other households.
 
 ```{r desc_copy_hh_overview}
 #| output: asis
 cat(desc_copy[["hh_overview"]])
 ```
 
-```{r household_composition_grouped_plot}
-#| label: fig-household-composition-grouped
+```{r household_composition_plot}
+#| label: fig-household-composition
 #| fig-cap: Population household distribution overview
 census_data[["plots"]][["household_grouped"]]
 ```
 
-```{r household_composition_super_table}
-#| label: tbl-household-composition-grouped
+```{r household_composition_table}
+#| label: tbl-household-composition
 #| tbl-cap: Population household distribution overview
-census_data[["tables"]][["household_composition_super"]] |> 
-  kable()
-```
-
-{{< pagebreak >}}
-
-### Couples
-
-@fig-household-composition-couples and @tbl-household-composition-couples show the distribution of households comprised of a couple, with or without children. These couples may be cohabiting, married, or living in a civil partnership. These households may also include one member in addition to the couple and their children, such as a lodger or a grandparent. Couple-households in which all members are over the age of 65 are considered separately to these households.
-
-```{r desc_copy_hh_couples}
-#| output: asis
-cat(desc_copy[["hh_couples"]])
-```
-
-```{r couples_plot}
-#| label: fig-household-composition-couples
-#| fig-cap: Household distribution – couples
-census_data[["plots"]][["household_couples"]]
-```
-
-```{r couples_table}
-#| label: tbl-household-composition-couples
-#| tbl-cap: Household distribution – couples
-census_data[["tables"]][["household_composition_couple"]] |> 
-  kable()
-```
-
-{{< pagebreak >}}
-
-### Lone occupants and single parents
-
-@fig-household-composition-lone and @tbl-household-composition-lone show the distribution of households comprised of either a single occupant or a single parent living with their children (who may or may not be dependent children). Lone occupants over the age of 65 are considered separately to other lone occupants.
-
-```{r desc_copy_hh_lone}
-#| output: asis
-cat(desc_copy[["hh_lone"]])
-```
-
-```{r lone_plot}
-#| label: fig-household-composition-lone
-#| fig-cap: Household distribution – Lone occupants & single parents
-census_data[["plots"]][["household_lone"]]
-```
-
-```{r lone_table}
-#| label: tbl-household-composition-lone
-#| tbl-cap: Household distribution – Lone occupants & single parents
-census_data[["tables"]][["household_composition_lone"]] |> 
-  kable()
-```
-
-{{< pagebreak >}}
-
-### Other
-
-@fig-household-composition-other and @tbl-household-composition-other show the distribution of households not described in previous subsections. These include households comprised of:
-
-```{r order_bullets}
-#| output: asis
-#| 
-bullets <- 
-  c(
-    "* Other households comprised of a single family. This group includes any family households in which all people are aged 66 years and above",
-    "* Any other households, including residential care homes and shared accomodation"
-  )
-
-bullets_names <-
-  c(
-    "Other families (inc. all 66+ y.o)",
-    "Other households"
-    )
-
-table_names <- rownames(census_data[["tables"]][["household_composition_other"]])
-
-bullets_order <- match(bullets_names, table_names)
-
-bullets <- bullets[bullets_order]
-
-str_c(bullets, collapse = "\n") |> 
-  cat()
-```
-
-```{r desc_copy_hh_other}
-#| output: asis
-cat(desc_copy[["hh_other"]])
-```
-
-```{r other_plot}
-#| label: fig-household-composition-other
-#| fig-cap: Household distribution – Other compositions
-census_data[["plots"]][["other_households"]]
-```
-
-```{r other_table}
-#| label: tbl-household-composition-other
-#| tbl-cap: Household distribution – Other compositions
-census_data[["tables"]][["household_composition_other"]] |> 
+census_data[["tables"]][["household_composition"]] |> 
   kable()
 ```
 

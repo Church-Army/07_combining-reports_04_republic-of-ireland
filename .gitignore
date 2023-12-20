@@ -10,3 +10,5 @@
 
 R/*_files/
 R/*_cache/
+
+**/*\$*.docx
