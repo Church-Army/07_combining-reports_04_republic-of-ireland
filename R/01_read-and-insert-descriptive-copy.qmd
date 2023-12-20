@@ -1,0 +1,88 @@
+---
+title: "Read and insert descriptive copy"
+format: html
+editor: visual
+---
+
+```{r libraries}
+library(conflicted)
+
+library(fs)
+library(here)
+
+library(stringr)
+library(dplyr)
+library(purrr)
+conflicted::conflicts_prefer(dplyr::lag)
+```
+
+## Read copy from text files
+
+```{r read_copy_from_text_files}
+copy <- 
+  map(
+    dir_ls(here("data", "templates", "com-copy-templates")),
+    readLines
+  )
+
+headings <- map(copy, \(x) str_which(x, "^## .+"))
+
+copy_begins <- map(headings, \(x) x + 1)
+
+copy_ends <- map2(headings, lengths(copy),
+                 \(x, y){
+                   x <- lead(x - 1)
+                   x[is.na(x)] <- y
+                   x
+                 })
+
+copy_range <- map2(copy_begins, copy_ends,
+                   \(x,y) map2(x,y, \(a,b) a:b))
+
+heading_text <- c("age", "ethnicity", "religion", "general_health",
+                  "hh_overview", "hh_couples", "hh_lone", "hh_other")
+
+copy_range <- map(copy_range,
+                  \(x){
+                    names(x) <- heading_text
+                    x
+                    })
+
+copy <- map2(copy_range, copy,
+            \(x, y){
+              map(x, 
+                   \(ranges){
+                     y[ranges]
+                   })
+              }
+            )
+
+copy <- map(copy, \(x)
+            map(x,
+                \(y){
+                  str_c(y, collapse = "\n") |> 
+                    str_squish()
+                  })
+            )
+```
+
+## Save text data
+
+```{r save_text_data}
+text_dir <- dir_create(here("data", "com-descriptive-text"))
+
+names(copy) <- 
+  names(copy) |> 
+  path_file() |> 
+  path_ext_remove() |> 
+  str_remove("_report-copy")
+
+iwalk(copy,
+      \(com_copy, com_name){
+        
+        file_name <- str_c(com_name, "descriptive-copy.RDS", sep = "_")
+        
+        saveRDS(com_copy, file.path(text_dir, file_name))
+      }
+      )
+```

@@ -1,0 +1,38 @@
+---
+title: "Create copy templates"
+format: html
+editor: visual
+---
+
+```{r libraries}
+library(conflicted)
+
+library(fs)
+library(here)
+
+library(stringr)
+library(purrr)
+```
+
+```{r copy_template}
+templates <- dir_create(here("data", "templates", "com-copy-templates"))
+
+com_names <- 
+  dir_ls(here("data", "census-data")) |> 
+  path_file() |> 
+  path_ext_remove() |> 
+  str_remove("_report-data")
+
+new_files <- str_c(com_names, "_report-copy.txt")
+new_files <- here("data", "templates", "com-copy-templates", new_files)
+
+walk(new_files,
+     \(x){
+       file_copy(
+         here("data", "templates", "descriptive-copy-template.txt"),
+         x
+       )
+       }
+     )
+
+```

@@ -1,0 +1,122 @@
+---
+title: "Render reports"
+author: "Dave"
+format: html
+editor: visual
+---
+
+## Libraries
+
+```{r libraries}
+library(conflicted)
+
+library(fs)
+library(here)
+
+library(stringr)
+library(purrr)
+library(quarto)
+library(tools)
+library(snakecase)
+```
+
+## Render
+
+```{r render}
+#| output: asis
+render_names <-
+  dir_ls(here("data", "census-data")) |> 
+  path_file() |> 
+  path_ext_remove() |> 
+  str_remove("_report-data")
+
+reports <- dir_create(here("reports"))
+
+suffix <- " Centre of Mission Impact and Context Report.docx"
+
+cat("\n These CoM's reports have not successfully rendered:")
+
+check_dir <- dir_create(here("data", "checksums"))
+
+walk(render_names,
+     \(x){
+       tryCatch(
+         expr ={
+           
+           render <- TRUE
+           
+           checksums = c(
+             census =
+               md5sum(
+                 here("data", "census-data",
+                      paste(x, "report-data.RDS", sep = "_")
+                      )
+                 ),
+             rtj = 
+               md5sum(
+                 here("data", "rtj-report-copy",
+                      paste(x, "report-copy.RDS", sep = "_")
+                      )
+                 ),
+             copy = 
+               md5sum(
+                 here("data", "com-descriptive-text",
+                      paste(x, "descriptive-copy.RDS", sep = "_")
+                      )
+               ),
+             template = 
+               md5sum(
+                 here("templates", "com-report-template.qmd")
+                 )
+             )
+           
+           checksum_file <- str_c(x, "checksums.RDS", sep = "_")
+           checksum_path <- file.path(check_dir, checksum_file)
+           
+           if(file_exists(checksum_path)){
+             old_checksums <- readRDS(checksum_path)
+             
+             checksums_match <-
+               all(checksums == old_checksums)
+             
+             if(checksums_match) render <- FALSE
+           }
+           
+           document_name <- str_c(
+             str_replace_all(x, "-", " ") |> 
+               to_title_case(),
+             suffix
+           )
+           
+           if(!file_exists(
+             here("reports", document_name)
+           )){
+             render <- TRUE
+           }
+           
+           if(render){
+             quarto_render(
+               input = here("templates", "com-report-template.qmd"),
+               output_format = "docx",
+               output_file = document_name,
+               execute_params = list(com_name = x),
+               quiet = TRUE
+               )
+             
+             saveRDS(checksums, checksum_path)
+           }
+         },
+         error = function(cnd){
+           cat("* ", x, "\n")
+         }
+         )
+       })
+
+old_paths <- dir_ls(here("R"), regexp = str_c(".+", suffix, "$"))
+
+new_paths <- 
+  path_file(old_paths) |> 
+  path(here("reports"), file = _)
+
+file_move(old_paths, new_paths)
+```
