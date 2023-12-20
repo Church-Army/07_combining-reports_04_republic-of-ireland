@@ -4,3 +4,9 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+
+**.html
+
+R/*_files/
+R/*_cache/
