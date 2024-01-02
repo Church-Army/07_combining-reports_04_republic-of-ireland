@@ -39,8 +39,8 @@ copy_ends <- map2(headings, lengths(copy),
 copy_range <- map2(copy_begins, copy_ends,
                    \(x,y) map2(x,y, \(a,b) a:b))
 
-heading_text <- c("age", "ethnicity", "religion", "general_health",
-                  "hh_overview", "hh_couples", "hh_lone", "hh_other")
+heading_text <- c("age", "ethnicity", "religion",
+                  "general_health", "hh_overview")
 
 copy_range <- map(copy_range,
                   \(x){
