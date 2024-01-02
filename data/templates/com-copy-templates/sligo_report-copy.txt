@@ -1,18 +1,19 @@
 ## Age
 
-
+The population local to Sligo CoM is home to a larger proportion of 20-29 year olds than the national population, as well as a larger proportion of people over the age of 60. Children and teenagers, on the other hand, are less prevalent locally than nationally.
 
 ## Ethnicity
 
-
+The majority of the local population are White, but white people comprise a slightly smaller share of the local population than the national average. Asian, unstated and other ethnicities are all marginally more prevalent locally than elsewhere.
 
 ## Religion
 
-
+The local area is majority catholic, but slightly less Catholic than the diocese and marginally less Catholic than the nation. Irreligiosity is comparable locally and nationally, despite being lower within the diocese than the national average.
 
 ## General health
 
-
+Self reported general health outcomes are marginally worse in the local area than the national average; locally, three percent fewer people report their general health to be 'very good' than within the nation.
 
 ## Household composition overview
 
+One-person households account for 30% of all local households, compared to 23% of households nationwide. Couples with children account for approximately a quarter of the local population, whereas in the national population they account for over 35% of all households. Non-family households are more prevalent in the local area than elsewhere, and account for over 1 in 10 local households. 

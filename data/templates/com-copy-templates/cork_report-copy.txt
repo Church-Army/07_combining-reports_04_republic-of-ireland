@@ -1,18 +1,19 @@
 ## Age
 
-
+The population local to Cork CoM is slightly younger than the national population, and home to more 0-9 and 30-44 year olds. 
 
 ## Ethnicity
 
-
+White people are equally prevalent between the local and the national population. Locally, 1 in 20 people are Asian.
 
 ## Religion
 
-
+At the very high level of the CSO census variables, religious affiliation is very similar across the local, diocesan and national populations. 70% of the local population are Catholic.
 
 ## General health
 
-
+Self repoprted general health outcomes are slightly better in the local area than in the diocese or the nation; 60% of local people rate their overall health as 'very good'.
 
 ## Household composition overview
 
+The composition of households in the local area is broadly similar to that of the whole of the Republic of Ireland, except that couples with children account for a slightly larger share of households, whereas one person households and non-family households account for a smaller share.
