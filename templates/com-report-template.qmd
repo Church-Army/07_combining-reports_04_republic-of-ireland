@@ -250,11 +250,7 @@ census_data[["tables"]][["general_health"]] |>
 
 ### Household composition
 
-Household composition can be summarised in a variety of ways. This report gives a high-level overview of households before considering several sub-sections of all households in more detail.
-
-### Overview of household composition
-
-@fig-household-composition and @tbl-household-composition give a summary of the prevalence of different kinds of household across all geographies. These are: Households comprised of a single occupant, households with dependent children and all other households.
+@fig-household-composition and @tbl-household-composition give a summary of the prevalence of different kinds of household across all geographies.
 
 ```{r desc_copy_hh_overview}
 #| output: asis
