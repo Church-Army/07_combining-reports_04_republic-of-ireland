@@ -12,7 +12,7 @@ At the very high level of the CSO census variables, religious affiliation is ver
 
 ## General health
 
-Self repoprted general health outcomes are slightly better in the local area than in the diocese or the nation; 60% of local people rate their overall health as 'very good'.
+Self reported general health outcomes are slightly better in the local area than in the diocese or the nation; 60% of local people rate their overall health as 'very good'.
 
 ## Household composition overview
 
